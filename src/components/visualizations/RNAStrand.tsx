@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Html, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
@@ -29,10 +29,13 @@ function Base({ pos, color, index }: { pos: THREE.Vector3; color: string; index:
   )
 }
 
-export function RNAStrandCanvas({ length = 30 }: { length?: number }) {
+function AutoRotateGroup({ children }: { children: ReactNode }) {
   const ref = useRef<THREE.Group>(null)
-  useFrame((s) => { if (ref.current) ref.current.rotation.y += 0.01 })
+  useFrame(() => { if (ref.current) ref.current.rotation.y += 0.01 })
+  return <group ref={ref}>{children}</group>
+}
 
+export function RNAStrandCanvas({ length = 30 }: { length?: number }) {
   const bases: THREE.Vector3[] = []
   const positions = new Float32Array(length * 3)
   const colors = new Float32Array(length * 3)
@@ -59,11 +62,11 @@ export function RNAStrandCanvas({ length = 30 }: { length?: number }) {
         <pointLight position={[0, 3, 0]} color="#10b981" intensity={0.5} />
         {/* @ts-ignore */}
         <fog color="#0a0a0a" near={5} far={25} />
-        <group ref={ref}>
+        <AutoRotateGroup>
           {bases.map((pos, i) => (
             <Base key={i} pos={pos} color={BASE_COLORS[RNA_BASES[i % 4]]} index={i} />
           ))}
-        </group>
+        </AutoRotateGroup>
         <OrbitControls enablePan={false} autoRotate autoRotateSpeed={0.3} />
         <Html position={[0, 5, 0]} center>
           <div className="text-center pointer-events-none">
@@ -76,9 +79,9 @@ export function RNAStrandCanvas({ length = 30 }: { length?: number }) {
   )
 }
 
-export function RNAStrand({ length, height }: { length?: number; height?: number }) {
+export function RNAStrand({ length, height = 400 }: { length?: number; height?: number }) {
   return (
-    <div style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ width: '100%', height, position: 'relative', overflow: 'hidden' }}>
       <RNAStrandCanvas length={length} />
     </div>
   )

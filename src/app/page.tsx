@@ -1,4 +1,4 @@
-import { Hero, Stats, Services, Highlights, CTA } from '@/components/sections/Hero'
+import { Hero, Stats, Services, CTA } from '@/components/sections/Hero'
 
 export default function Home() {
   return (
@@ -6,7 +6,6 @@ export default function Home() {
       <Hero />
       <Stats />
       <Services />
-      <Highlights />
       <CTA />
     </>
   )

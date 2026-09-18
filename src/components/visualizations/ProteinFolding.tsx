@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Html, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
@@ -33,10 +33,14 @@ function Residue({ pos, aa, index }: { pos: THREE.Vector3; aa: typeof AMINO_ACID
   )
 }
 
+function AutoRotateGroup({ children }: { children: ReactNode }) {
+  const ref = useRef<THREE.Group>(null)
+  useFrame(() => { if (ref.current) ref.current.rotation.y += 0.008 })
+  return <group ref={ref}>{children}</group>
+}
+
 export function ProteinFoldingCanvas({ length = 40 }: { length?: number }) {
   const [folded, setFolded] = useState(false)
-  const ref = useRef<THREE.Group>(null)
-  useFrame((s) => { if (ref.current) ref.current.rotation.y += 0.008 })
 
   const residues: { pos: THREE.Vector3; aa: typeof AMINO_ACIDS[0] }[] = []
   for (let i = 0; i < length; i++) {
@@ -63,11 +67,11 @@ export function ProteinFoldingCanvas({ length = 40 }: { length?: number }) {
         <pointLight position={[0, 5, 0]} color="#10b981" intensity={0.5} />
         {/* @ts-ignore */}
         <fog color="#0a0a0a" near={5} far={25} />
-        <group ref={ref}>
+        <AutoRotateGroup>
           {residues.map((r, i) => (
             <Residue key={i} pos={r.pos} aa={r.aa} index={i} />
           ))}
-        </group>
+        </AutoRotateGroup>
         <OrbitControls enablePan={false} autoRotate autoRotateSpeed={0.3} />
         <Html position={[0, 7, 0]} center>
           <div className="text-center pointer-events-none">
@@ -83,9 +87,9 @@ export function ProteinFoldingCanvas({ length = 40 }: { length?: number }) {
   )
 }
 
-export function ProteinFolding({ length, height }: { length?: number; height?: number }) {
+export function ProteinFolding({ length, height = 400 }: { length?: number; height?: number }) {
   return (
-    <div style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ width: '100%', height, position: 'relative', overflow: 'hidden' }}>
       <ProteinFoldingCanvas length={length} />
     </div>
   )
