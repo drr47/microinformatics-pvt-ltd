@@ -57,13 +57,7 @@ export function Header() {
           <div className="flex items-center gap-8 lg:gap-12">
             <Link href="/" className="flex items-center gap-2" aria-label="Microinformatics Home">
               <div className="relative">
-                <svg className="h-9 w-9 text-emerald-600" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 2C8.268 2 2 8.268 2 16C2 23.732 8.268 30 16 30C23.732 30 30 23.732 30 16C30 8.268 23.732 2 16 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M16 8C11.589 8 8 11.589 8 16C8 20.411 11.589 24 16 24C20.411 24 24 20.411 24 16C24 11.589 20.411 8 16 8Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M16 10V22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M10 16H22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <circle cx="16" cy="16" r="3" fill="currentColor"/>
-                </svg>
+                <img src="/microinformatics_cover.jpg" alt="Microinformatics" className="h-9 w-9 rounded-full object-cover" />
                 <span className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-white dark:border-slate-900 animate-pulse" />
               </div>
               <span className="text-xl font-bold text-slate-900 dark:text-white hidden sm:block">
