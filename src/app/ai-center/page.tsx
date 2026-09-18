@@ -492,7 +492,7 @@ export default function AICenterPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative rounded-2xl overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20"
             >
-              <div className="aspect-video relative p-4">
+              <div className="h-[400px] relative p-4">
                 <NeuralNetwork />
               </div>
             </motion.div>

@@ -24,7 +24,7 @@ const trustBadges = [
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden scroll-mt-20">
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
       <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5" />
       
@@ -111,8 +111,8 @@ export function Hero() {
             className="relative"
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-emerald-200/50 dark:border-emerald-800/50 bg-white dark:bg-slate-800">
-              <div className="aspect-video relative">
-                <DNAHelix basePairs={35} autoRotate={true} showLabels={false} />
+              <div className="h-[300px] sm:h-[400px] relative">
+                <DNAHelix basePairs={35} autoRotate={true} showLabels={false} height={400} />
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent">
                 <div className="flex items-center justify-center gap-6 text-white text-sm">
@@ -154,7 +154,7 @@ export function Hero() {
 
 export function Stats() {
   return (
-    <section className="py-16 lg:py-24 bg-white dark:bg-slate-950 border-y border-slate-200 dark:border-slate-800">
+    <section className="py-16 lg:py-24 bg-white dark:bg-slate-950 border-y border-slate-200 dark:border-slate-800 scroll-mt-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {stats.map((stat, i) => (
@@ -223,7 +223,7 @@ const services = [
 
 export function Services() {
   return (
-    <section className="py-24 lg:py-32 bg-slate-50 dark:bg-slate-900">
+    <section className="py-24 lg:py-32 bg-slate-50 dark:bg-slate-900 scroll-mt-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -313,7 +313,7 @@ const highlights = [
 
 export function Highlights() {
   return (
-    <section className="py-24 lg:py-32 bg-white dark:bg-slate-950">
+    <section className="py-24 lg:py-32 bg-white dark:bg-slate-950 scroll-mt-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -354,7 +354,7 @@ export function Highlights() {
 
 export function CTA() {
   return (
-    <section className="py-24 lg:py-32 relative overflow-hidden">
+    <section className="py-24 lg:py-32 relative overflow-hidden scroll-mt-20">
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600" />
       <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl" />

@@ -15,22 +15,6 @@ const BASE_COLORS: Record<string, string> = {
 
 const RNA_BASES = ['A', 'U', 'G', 'C']
 
-// @ts-ignore - Helper function for RNA folding
-const calculateFoldedPositions = (length: number, height: number, radius: number): THREE.Vector3[] => {
-  const positions: THREE.Vector3[] = []
-  for (let i = 0; i < length; i++) {
-    const t = i / (length - 1)
-    // Create a folded structure - hairpin-like
-    const angle = Math.PI * 2 * t * 1.5
-    const y = (t - 0.5) * height * 0.5
-    const foldRadius = radius * (0.5 + 0.5 * Math.sin(t * Math.PI * 4))
-    const x = foldRadius * Math.cos(angle)
-    const z = foldRadius * Math.sin(angle)
-    positions.push(new THREE.Vector3(x, y, z))
-  }
-  return positions
-}
-
 function RNAStrandInner({ 
   length = 50, 
   height = 25, 
@@ -123,17 +107,14 @@ function RNAStrandInner({
         const baseColor = BASE_COLORS[base]
         
         return (
-          // @ts-ignore - Ref type issue
           <RNABase
-key={i}
+            key={i}
             base={base}
             position={pos}
             rotation={baseRotations[i]}
             color={baseColor}
             index={i}
-            // @ts-ignore - Ref type issue
-            // @ts-ignore - Parameter type
-            ref={(el) => { basesRef.current[i] = el! }}
+            ref={(el) => { if (el) basesRef.current[i] = el as THREE.Mesh }}
           />
         )
       })}
@@ -167,7 +148,7 @@ function RNABase({
   rotation: number
   color: string
   index: number
-  ref: React.RefObject<THREE.Mesh>
+  ref?: React.RefObject<THREE.Mesh> | ((el: THREE.Mesh | null) => void)
 }) {
   const [hovered, setHovered] = useState(false)
   const meshRef = useRef<THREE.Mesh>(null)
@@ -181,13 +162,10 @@ function RNABase({
   })
 
   return (
-    // @ts-ignore - Ref type issue
     <mesh
-      // @ts-ignore - Ref forwarding issue
-      ref={(el) => { meshRef.current = el; if (ref) ref.current = el }}
+      ref={(el) => { meshRef.current = el; if (ref) (ref as React.MutableRefObject<THREE.Mesh | null>).current = el }}
       position={position}
-      // @ts-ignore - Three.js rotation type
-      rotation={{ y: rotation }}
+      rotation={[0, rotation, 0]}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
       castShadow
@@ -220,6 +198,20 @@ function RNABase({
       </Html>
     </mesh>
   )
+}
+
+function calculateFoldedPositions(length: number, height: number, radius: number): THREE.Vector3[] {
+  const positions: THREE.Vector3[] = []
+  for (let i = 0; i < length; i++) {
+    const t = i / (length - 1)
+    const angle = Math.PI * 2 * t * 1.5
+    const y = (t - 0.5) * height * 0.5
+    const foldRadius = radius * (0.5 + 0.5 * Math.sin(t * Math.PI * 4))
+    const x = foldRadius * Math.cos(angle)
+    const z = foldRadius * Math.sin(angle)
+    positions.push(new THREE.Vector3(x, y, z))
+  }
+  return positions
 }
 
 function ParticleField({ count = 150, radius = 12 }: { count?: number; radius?: number }) {
@@ -280,14 +272,14 @@ function ParticleField({ count = 150, radius = 12 }: { count?: number; radius?: 
   return <points ref={particlesRef} geometry={geometry} material={material} />
 }
 
-export function RNAStrandCanvas({ length = 50 }: { length?: number }) {
+export function RNAStrandCanvas({ length = 50, height = 400 }: { length?: number; height?: number }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 30], fov: 40 }}
       gl={{ antialias: true, alpha: true }}
-      style={{ width: '100%', height: '100%', minHeight: 500 }}
+      style={{ width: '100%', height: '100%' }}
     >
-      {/* @ts-ignore - Three.js fog type issue */}
+      {/* @ts-ignore */}
       <fog color="#0f172a" near={15} far={60} />
       
       <ambientLight intensity={0.6} />
@@ -311,14 +303,10 @@ export function RNAStrandCanvas({ length = 50 }: { length?: number }) {
   )
 }
 
-export function RNAStrand({ className, ...props }: { className?: string; length?: number }) {
+export function RNAStrand({ className, height = 400, length = 50, ...props }: { className?: string; height?: number; length?: number }) {
   return (
-    <div className={className} style={{ width: '100%', height: '100%', minHeight: 500 }}>
-      <RNAStrandCanvas {...props} />
+    <div className={className} style={{ width: '100%', height: height, minHeight: height }}>
+      <RNAStrandCanvas height={height} length={length} />
     </div>
   )
-}
-
-function group({ children }: { children: React.ReactNode }) {
-  return <group>{children}</group>
 }

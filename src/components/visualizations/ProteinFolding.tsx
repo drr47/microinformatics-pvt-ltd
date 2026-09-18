@@ -87,8 +87,7 @@ function ProteinChain({
         aa={aa}
         position={currentPos}
         index={i}
-        // @ts-ignore - Ref type issue
-        ref={(el) => { residuesRef.current[i] = el! }}
+        ref={(el) => { if (el) residuesRef.current[i] = el as THREE.Mesh }}
         animationProgress={animationProgress}
       />
     )
@@ -137,13 +136,13 @@ function ProteinChain({
               onClick={() => setAnimationProgress(0)}
               className="px-3 py-1 text-xs bg-emerald-600/20 border border-emerald-500/50 rounded-lg text-emerald-300 hover:bg-emerald-600/30 transition-colors backdrop-blur"
             >
-              Unfold
+              Unfolded
             </button>
             <button
               onClick={() => setAnimationProgress(1)}
               className="px-3 py-1 text-xs bg-emerald-600/20 border border-emerald-500/50 rounded-lg text-emerald-300 hover:bg-emerald-600/30 transition-colors backdrop-blur"
             >
-              Fold
+              Folded
             </button>
           </div>
         </motion.div>
@@ -163,7 +162,7 @@ function Residue({
   position: THREE.Vector3
   index: number
   animationProgress: number
-  ref: React.RefObject<THREE.Mesh>
+  ref?: React.RefObject<THREE.Mesh> | ((el: THREE.Mesh | null) => void)
 }) {
   const [hovered, setHovered] = useState(false)
   const meshRef = useRef<THREE.Mesh>(null)
@@ -177,10 +176,8 @@ function Residue({
   })
 
   return (
-    // @ts-ignore - Ref type issue
     <mesh
-      // @ts-ignore - Ref forwarding issue
-      ref={(el) => { meshRef.current = el; if (ref) ref.current = el }}
+      ref={(el) => { meshRef.current = el; if (ref) (ref as React.MutableRefObject<THREE.Mesh | null>).current = el }}
       position={position}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
@@ -262,17 +259,17 @@ function ParticleField({ count = 100, radius = 10 }: { count?: number; radius?: 
   return <points ref={particlesRef} geometry={geometry} material={material} />
 }
 
-export function ProteinFoldingCanvas({ length = 60 }: { length?: number }) {
+export function ProteinFoldingCanvas({ length = 60, height = 400 }: { length?: number; height?: number }) {
   const [folded, setFolded] = useState(false)
   
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
       <Canvas
         camera={{ position: [0, 0, 25], fov: 40 }}
         gl={{ antialias: true, alpha: true }}
-        style={{ width: '100%', height: '100%', minHeight: 500 }}
+        style={{ width: '100%', height: '100%' }}
       >
-        {/* @ts-ignore - Three.js fog type issue */}
+        {/* @ts-ignore */}
         <fog color="#0f172a" near={15} far={50} />
         
         <ambientLight intensity={0.7} />
@@ -320,14 +317,10 @@ export function ProteinFoldingCanvas({ length = 60 }: { length?: number }) {
   )
 }
 
-export function ProteinFolding({ className, ...props }: { className?: string; length?: number }) {
+export function ProteinFolding({ className, height = 400, length = 60, ...props }: { className?: string; height?: number; length?: number }) {
   return (
-    <div className={className} style={{ width: '100%', height: '100%', minHeight: 500, position: 'relative' }}>
-      <ProteinFoldingCanvas {...props} />
+    <div className={className} style={{ width: '100%', height: height, minHeight: height, position: 'relative' }}>
+      <ProteinFoldingCanvas height={height} length={length} />
     </div>
   )
-}
-
-function group({ children }: { children: React.ReactNode }) {
-  return <group>{children}</group>
 }

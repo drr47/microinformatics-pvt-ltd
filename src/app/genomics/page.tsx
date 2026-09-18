@@ -275,13 +275,13 @@ export default function GenomicsPage() {
                   </div>
                 </div>
 
-                <div className="relative rounded-2xl overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                  <div className="aspect-video relative">
-                    {activeViz === 'dna' && <DNAHelix basePairs={40} autoRotate={true} showLabels={true} />}
-                    {activeViz === 'rna' && <RNAStrand length={60} />}
-                    {activeViz === 'protein' && <ProteinFolding length={80} />}
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-900/95 via-transparent to-transparent">
+<div className="relative rounded-2xl overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                   <div className="h-[350px] sm:h-[450px] relative">
+                     {activeViz === 'dna' && <DNAHelix basePairs={40} autoRotate={true} showLabels={true} height={450} />}
+                     {activeViz === 'rna' && <RNAStrand length={60} height={450} />}
+                     {activeViz === 'protein' && <ProteinFolding length={80} height={450} />}
+                   </div>
+                   <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-900/95 via-transparent to-transparent">
                     <p className="text-white text-sm text-center">
                       {visualizations[activeViz].description} • Drag to rotate • Scroll to zoom
                     </p>

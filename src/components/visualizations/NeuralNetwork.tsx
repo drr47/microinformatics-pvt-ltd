@@ -249,14 +249,14 @@ function ParticleField({ count = 200, radius = 15 }: { count?: number; radius?: 
   return <points ref={particlesRef} geometry={geometry} material={material} />
 }
 
-export function NeuralNetworkCanvas() {
+export function NeuralNetworkCanvas({ height = 400 }: { height?: number }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 28], fov: 35 }}
       gl={{ antialias: true, alpha: true }}
-      style={{ width: '100%', height: '100%', minHeight: 500 }}
+      style={{ width: '100%', height: '100%' }}
     >
-      {/* @ts-ignore - Three.js fog type issue */}
+      {/* @ts-ignore */}
       <fog color="#0f172a" near={15} far={60} />
       
       <ambientLight intensity={0.5} />
@@ -280,10 +280,10 @@ export function NeuralNetworkCanvas() {
   )
 }
 
-export function NeuralNetwork({ className }: { className?: string }) {
+export function NeuralNetwork({ className, height = 400 }: { className?: string; height?: number }) {
   return (
-    <div className={className} style={{ width: '100%', height: '100%', minHeight: 500 }}>
-      <NeuralNetworkCanvas />
+    <div className={className} style={{ width: '100%', height: height, position: 'relative' }}>
+      <NeuralNetworkCanvas height={height} />
     </div>
   )
 }

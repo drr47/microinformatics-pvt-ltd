@@ -261,7 +261,7 @@ export default function AIMLPage() {
                 </div>
 
                 <div className="relative rounded-2xl overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                  <div className="aspect-video relative">
+                  <div className="h-[400px] relative">
                     <NeuralNetwork />
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-900/95 via-transparent to-transparent">

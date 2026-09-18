@@ -119,8 +119,7 @@ function BasePair({ base, position, rotation, radius, strandIndex }: {
     <mesh
       ref={ref}
       position={position}
-      // @ts-ignore - Three.js rotation type
-      rotation={{ y: rotation + Math.PI / 2 }}
+      rotation={[0, rotation + Math.PI / 2, 0]}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
       castShadow
@@ -253,15 +252,16 @@ function ParticleField({ count = 200, radius = 10 }: { count?: number; radius?: 
 export function DNAHelixCanvas({ 
   basePairs = 30, 
   autoRotate = true, 
-  showLabels = true 
-}: DNAHelixProps) {
+  showLabels = true,
+  height = 400
+}: DNAHelixProps & { height?: number }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 25], fov: 40 }}
       gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }}
-      style={{ width: '100%', height: '100%', minHeight: 500 }}
+      style={{ width: '100%', height: '100%' }}
     >
-      {/* @ts-ignore - Three.js fog type issue */}
+      {/* @ts-ignore */}
       <fog color="#0f172a" near={10} far={50} />
       
       <ambientLight intensity={0.6} />
@@ -320,14 +320,10 @@ export function DNAHelixCanvas({
   )
 }
 
-export function DNAHelix({ className, ...props }: DNAHelixProps) {
+export function DNAHelix({ className, height = 400, basePairs = 30, autoRotate = true, showLabels = true }: DNAHelixProps & { height?: number; basePairs?: number; autoRotate?: boolean; showLabels?: boolean }) {
   return (
-    <div className={className} style={{ width: '100%', height: '100%', minHeight: 500 }}>
-      <DNAHelixCanvas {...props} />
+    <div className={className} style={{ width: '100%', height: height, minHeight: height }}>
+      <DNAHelixCanvas basePairs={basePairs} autoRotate={autoRotate} showLabels={showLabels} height={height} />
     </div>
   )
-}
-
-function group({ children }: { children: React.ReactNode }) {
-  return <group>{children}</group>
 }
